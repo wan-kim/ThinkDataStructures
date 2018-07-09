@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * @author downey
  * @param <T>
- *
+ * @author downey
  */
 public class MyArrayList<T> implements List<T> {
 	int size;                    // keeps track of the number of elements
@@ -44,8 +43,12 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public boolean add(T element) {
-		// TODO: FILL THIS IN!
-		return false;
+		if (size >= array.length) {
+			array = Arrays.copyOf(array, array.length * 2);
+		}
+		array[size] = element;
+		size++;
+		return true;
 	}
 
 	@Override
@@ -57,8 +60,8 @@ public class MyArrayList<T> implements List<T> {
 		add(element);
 
 		// shift the elements
-		for (int i=size-1; i>index; i--) {
-			array[i] = array[i-1];
+		for (int i = size - 1; i > index; i--) {
+			array[i] = array[i - 1];
 		}
 		// put the new one in the right place
 		array[index] = element;
@@ -67,7 +70,7 @@ public class MyArrayList<T> implements List<T> {
 	@Override
 	public boolean addAll(Collection<? extends T> collection) {
 		boolean flag = true;
-		for (T element: collection) {
+		for (T element : collection) {
 			flag &= add(element);
 		}
 		return flag;
@@ -92,7 +95,7 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public boolean containsAll(Collection<?> collection) {
-		for (Object element: collection) {
+		for (Object element : collection) {
 			if (!contains(element)) {
 				return false;
 			}
@@ -110,12 +113,17 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public int indexOf(Object target) {
-		// TODO: FILL THIS IN!
+		for (int i = 0; i < size; i++) {
+			if (equals(array[i], target)) {
+				return i;
+			}
+		}
 		return -1;
 	}
 
-	/** Checks whether an element of the array is the target.
-	 *
+	/**
+	 * Checks whether an element of the array is the target.
+	 * <p>
 	 * Handles the special case that the target is null.
 	 *
 	 * @param target
@@ -145,7 +153,7 @@ public class MyArrayList<T> implements List<T> {
 	@Override
 	public int lastIndexOf(Object target) {
 		// see notes on indexOf
-		for (int i = size-1; i>=0; i--) {
+		for (int i = size - 1; i >= 0; i--) {
 			if (equals(target, array[i])) {
 				return i;
 			}
@@ -181,14 +189,18 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public T remove(int index) {
-		// TODO: FILL THIS IN!
-		return null;
+		T el = get(index);
+		for (int i = index; i < size - 1; i++) {
+			array[i] = array[i + 1];
+		}
+		size--;
+		return el;
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> collection) {
 		boolean flag = true;
-		for (Object obj: collection) {
+		for (Object obj : collection) {
 			flag &= remove(obj);
 		}
 		return flag;
@@ -201,8 +213,9 @@ public class MyArrayList<T> implements List<T> {
 
 	@Override
 	public T set(int index, T element) {
-		// TODO: FILL THIS IN!
-		return null;
+		T el = get(index);
+		array[index] = element;
+		return el;
 	}
 
 	@Override
